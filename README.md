@@ -21,6 +21,7 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 
 #### Add Axum and tokio and some tokio features to the project and do run:
     $ cargo add axum
+    $ cargo add axum -F headers
     $ cargo add tokio -F macros -F rt-multi-thread
     $ cargo add serde -F derive
     $ cargo run
