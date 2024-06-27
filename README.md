@@ -29,6 +29,8 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 #### Add tower for middlewares (active cors):
     $ cargo add tower-http -F cors
 
+#### Add Valiator crate:
+    $ cargo add validator -F derive
 
 #### Add auto restarting to the project and run:
     $ cargo install cargo-watch
