@@ -26,6 +26,9 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
     $ cargo add serde -F derive
     $ cargo run
 
+#### Add tower for middlewares (active cors):
+    $ cargo add tower-http -F cors
+
 
 #### Add auto restarting to the project and run:
     $ cargo install cargo-watch
