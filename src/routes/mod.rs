@@ -6,14 +6,14 @@ mod hello_world;
 mod partial_update_task;
 mod update_tasks;
 mod validate_with_serde;
-mod create_user;
+mod users;
 
 use axum::{
     routing::{delete, get, patch, post, put},
     Extension, Router,
 };
 use create_task::create_task;
-use create_user::create_user;
+use users::{create_user, login};
 use custom_json_extractor::custom_json_extractor;
 use delete_task::delete_tasks;
 use get_tasks::{get_all_tasks, get_task_by_id};
@@ -34,5 +34,6 @@ pub async fn create_routes(database: DatabaseConnection) -> Router {
         .route("/tasks/:task_id", patch(partial_update))
         .route("/tasks/:task_id", delete(delete_tasks))
         .route("/user", post(create_user))
+        .route("/users/login", post(login))
         .layer(Extension(database))
 }
