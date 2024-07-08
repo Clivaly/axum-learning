@@ -1,7 +1,11 @@
 use axum_learn::run;
+use dotenvy::dotenv;
+use dotenvy_macro::dotenv;
 
 #[tokio::main]
 async fn main() {
-    // here we just need the run() function to start our server
-    run().await
+    dotenv().ok();
+    let database_uri = dotenv!("DATABASE_URL");
+    
+    run(database_uri).await;
 }

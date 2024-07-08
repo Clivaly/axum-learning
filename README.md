@@ -8,6 +8,7 @@ useful links:
    - [Rust by Example](https://doc.rust-lang.org/rust-by-example)
    - [Visual Studio Code](https://code.visualstudio.com/download)
    - [Git](https://git-scm.com/downloads)
+   - [SeaORM](https://www.sea-ql.org/SeaORM)
 
 `
 Tip: I'm using an old version of axum, stay tuned! I will update later.
@@ -26,15 +27,24 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
     $ cargo add serde -F derive
     $ cargo run
 
+#### Add auto restarting to the project and run:
+    $ cargo install cargo-watch
+    $ cargo watch -x run
+
 #### Add tower for middlewares (active cors):
     $ cargo add tower-http -F cors
 
 #### Add Valiator crate:
     $ cargo add validator -F derive
 
-#### Add auto restarting to the project and run:
-    $ cargo install cargo-watch
-    $ cargo watch -x run
+### Add sea-ORM:
+    $ cargo add sea-orm -F sqlx-postgres -F runtime-tokio-rustls
+
+### Add .env:
+    $ cargo add dotenvy dotenvy_macro 
+
+### Add Chrono crate:
+    $ cargo add chrono
 
 #### Run local documentation:
     $ cargo doc

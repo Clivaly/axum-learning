@@ -1,73 +1,35 @@
-// Our Router File
-
-mod hello_world;
-mod mirror_body_string;
-mod mirror_body_json;
-mod path_variables;
-mod query_params;
-mod mirror_user_agent;
-mod mirror_custom_header;
-mod middleware_message;
-mod read_middleware_custom_header;
-mod set_middleware_custom_header;
-mod always_errors;
-mod returns_201;
-mod get_json;
-mod validate_with_serde;
+mod create_task;
 mod custom_json_extractor;
+mod delete_task;
+mod get_tasks;
+mod hello_world;
+mod partial_update_task;
+mod update_tasks;
+mod validate_with_serde;
 
 use axum::{
-    body::Body, http::Method, middleware, routing::{get, post}, Extension, Router
+    routing::{delete, get, patch, post, put},
+    Extension, Router,
 };
-
-use always_errors::always_errors;
+use create_task::create_task;
 use custom_json_extractor::custom_json_extractor;
-use get_json::get_json;
-use hello_world::hello_world;
-use read_middleware_custom_header::read_middleware_custom_header;
-use middleware_message::middleware_message;
-use mirror_body_json::mirror_body_json;
-use mirror_body_string::mirror_body_string;
-use mirror_custom_header::mirror_custom_header;
-use mirror_user_agent::mirror_user_agent;
-use path_variables::{hard_coded_path, path_variables};
-use query_params::query_params;
-use returns_201::returns_201;
-use set_middleware_custom_header::set_middleware_custom_header;
-use tower_http::cors::{Any, CorsLayer};
+use delete_task::delete_tasks;
+use get_tasks::{get_all_tasks, get_task_by_id};
+use partial_update_task::partial_update;
+use sea_orm::DatabaseConnection;
+use update_tasks::atomic_update;
 use validate_with_serde::validate_with_serde;
 
-#[derive(Clone)]
-pub struct SharedData {
-    pub message: String
-}
-
-// main function to create our routes
-pub fn create_routes() -> Router<Body> {
-    // CORS
-    let cors: CorsLayer = CorsLayer::new()
-        .allow_methods([Method::GET, Method::POST])
-        .allow_origin(Any);
-
-    let shared_data = SharedData{message: "Hello from Shared Data".to_owned()};
-
+pub async fn create_routes(database: DatabaseConnection) -> Router {
     Router::new()
-        .route("/read_middleware_custom_header", get(read_middleware_custom_header))
-        .route_layer(middleware::from_fn(set_middleware_custom_header))
-        .route("/", get(hello_world))
-        .route("/mirror_body_string", post(mirror_body_string))
-        .route("/mirror_body_json", post(mirror_body_json))
-        .route("/path_variables/:id", get(path_variables))
-        .route("/path_variables/11", get(hard_coded_path))
-        .route("/query_params", get(query_params))
-        .route("/mirror_user_agent", get(mirror_user_agent))
-        .route("/mirror_custom_header", get(mirror_custom_header))
-        .route("/middleware_message", get(middleware_message))
-        .layer(Extension(shared_data))
-        .layer(cors)
-        .route("/always_errors", get(always_errors))
-        .route("/returns_201", post(returns_201))
-        .route("/get_json", get(get_json))
-        .route("/validate_with_serde", post(validate_with_serde))
+        .route("/", get(hello_world::hello_world))
+        .route("/validate_data", post(validate_with_serde))
         .route("/custom_json_extractor", post(custom_json_extractor))
-    }
+        .route("/tasks", post(create_task))
+        .route("/tasks", get(get_all_tasks))
+        .route("/tasks/:task_id", get(get_task_by_id))
+        .route("/tasks/:task_id", put(atomic_update))
+        .route("/tasks/:task_id", patch(partial_update))
+        .route("/tasks/:task_id", delete(delete_tasks))
+        .layer(Extension(database))
+}

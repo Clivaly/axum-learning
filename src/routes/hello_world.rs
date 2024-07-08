@@ -1,3 +1,3 @@
 pub async fn hello_world() -> String {
-    "Hello World from my own file".to_owned()
+    "Welcome to this to-do app with rust".to_owned()
 }
