@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     healthcheck:
-      test: psql -U admin -q -d admin -c "SELECT 'ready';" 
+      test: psql -U postgres -q -d postgres -c "SELECT 'ready';" 
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ volumes:
 # Enter postgres inside container:
 # docker-compose exec database /bin/bash
 # Connect:
-# psql -U admin -q -d admin
+# psql -U postgres -q -d postgres
 # List tables:
 # \dt
 
