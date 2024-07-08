@@ -13,7 +13,7 @@ use axum::{
     Extension, Router,
 };
 use create_task::create_task;
-use users::{create_user, login};
+use users::{create_user, login, logout};
 use custom_json_extractor::custom_json_extractor;
 use delete_task::delete_tasks;
 use get_tasks::{get_all_tasks, get_task_by_id};
@@ -33,7 +33,8 @@ pub async fn create_routes(database: DatabaseConnection) -> Router {
         .route("/tasks/:task_id", put(atomic_update))
         .route("/tasks/:task_id", patch(partial_update))
         .route("/tasks/:task_id", delete(delete_tasks))
-        .route("/user", post(create_user))
+        .route("/users", post(create_user))
         .route("/users/login", post(login))
+        .route("/users/logout", post(logout))
         .layer(Extension(database))
 }

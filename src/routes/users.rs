@@ -1,5 +1,11 @@
+use axum::headers::authorization::Bearer;
+use axum::headers::Authorization;
+use axum::TypedHeader;
 use axum::{http::StatusCode, Extension, Json};
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter, Set};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
+    Set,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::database::users;
@@ -55,7 +61,8 @@ pub async fn login(
 
         user.token = Set(Some(new_token));
 
-        let saved_user = user.save(&database)
+        let saved_user = user
+            .save(&database)
             .await
             .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
@@ -68,4 +75,30 @@ pub async fn login(
     } else {
         Err(StatusCode::NOT_FOUND)
     }
+}
+
+pub async fn logout(
+    authorization: TypedHeader<Authorization<Bearer>>,
+    Extension(database): Extension<DatabaseConnection>,
+) -> Result<(), StatusCode> {
+    let token = authorization.token();
+
+    let mut user = if let Some(user) = Users::find()
+        .filter(users::Column::Token.eq(Some(token)))
+        .one(&database)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+    {
+        user.into_active_model()
+    } else {
+        return Err(StatusCode::UNAUTHORIZED);
+    };
+
+    user.token = Set(None);
+
+    user.save(&database)
+        .await
+        .map_err(|_error| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    Ok(())
 }
