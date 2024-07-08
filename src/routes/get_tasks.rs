@@ -14,6 +14,7 @@ pub struct ResponseTask {
     title: String,
     piority: Option<String>,
     description: Option<String>,
+    user_id: Option<i32>,
     deleted_at: Option<DateTime<FixedOffset>>,
 }
 
@@ -31,6 +32,7 @@ pub async fn get_task_by_id(
             title: task.title,
             description: task.description,
             piority: task.priority,
+            user_id: task.user_id,
             deleted_at: task.deleted_at,
         }))
     } else {
@@ -68,6 +70,7 @@ pub async fn get_all_tasks(
             title: db_task.title,
             piority: db_task.priority,
             description: db_task.description,
+            user_id: db_task.user_id,
             deleted_at: db_task.deleted_at,
         })
         .collect();
