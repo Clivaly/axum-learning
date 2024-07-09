@@ -46,6 +46,9 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 ### Add Chrono crate:
     $ cargo add chrono
 
+### Add Bcrypt crate:
+    & cargo add bcrypt
+
 #### Run local documentation:
     $ cargo doc
     $ cargo doc --open
