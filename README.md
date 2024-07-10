@@ -49,6 +49,9 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 ### Add Bcrypt crate:
     & cargo add bcrypt
 
+### Add Jsonwebtoken crate:
+    & cargo add jsonwebtoken
+
 #### Run local documentation:
     $ cargo doc
     $ cargo doc --open

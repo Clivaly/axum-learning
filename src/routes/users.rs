@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::database::users::{self, Model};
 use crate::database::users::Entity as Users;
+use crate::utils::jwt::create_jwt;
 
 #[derive(Deserialize)]
 pub struct RequestUser {
@@ -28,10 +29,11 @@ pub async fn create_user(
     Json(request_user): Json<RequestUser>,
     Extension(database): Extension<DatabaseConnection>,
 ) -> Result<Json<ResponseUser>, StatusCode> {
+    let jwt = create_jwt()?;
     let new_user = users::ActiveModel {
         username: Set(request_user.username),
         password: Set(hash_password(request_user.password)?),
-        token: Set(Some("1fsd7fs8$FAd!4=".to_owned())),
+        token: Set(Some(jwt)),
         ..Default::default()
     }
     .save(&database)
@@ -60,7 +62,7 @@ pub async fn login(
             return Err(StatusCode::UNAUTHORIZED);
         }
 
-        let new_token = "1313131234243465464".to_owned();
+        let new_token = create_jwt()?;
         let mut user = db_user.into_active_model();
 
         user.token = Set(Some(new_token));
