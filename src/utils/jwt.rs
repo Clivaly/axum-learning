@@ -4,6 +4,8 @@ use dotenvy_macro::dotenv;
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 
+use super::app_error::AppError;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Claims {
     // aud: String, // Optional. Audience
@@ -30,7 +32,7 @@ pub fn create_jwt() -> Result<String, StatusCode> {
     encode(&Header::default(), &claim, &key).map_err(|_error| StatusCode::INTERNAL_SERVER_ERROR)
 }
 
-pub fn is_valid(token: &str) -> Result<bool, StatusCode> {
+pub fn is_valid(token: &str) -> Result<bool, AppError> {
     let secret: &'static str = dotenv!("JWT_SECRET");
     let key = DecodingKey::from_secret(secret.as_bytes());
     decode::<Claims>(token, &key, &Validation::new(Algorithm::HS256)).map_err(|error| match error.kind() {
@@ -41,7 +43,7 @@ pub fn is_valid(token: &str) -> Result<bool, StatusCode> {
         // jsonwebtoken::errors::ErrorKind::InvalidAlgorithmName => todo!(),
         // jsonwebtoken::errors::ErrorKind::InvalidKeyFormat => todo!(),
         // jsonwebtoken::errors::ErrorKind::MissingRequiredClaim(_) => todo!(),
-        jsonwebtoken::errors::ErrorKind::ExpiredSignature => StatusCode::UNAUTHORIZED,
+        jsonwebtoken::errors::ErrorKind::ExpiredSignature => AppError::new(StatusCode::UNAUTHORIZED, "Your session has expired, please login again"),
         // jsonwebtoken::errors::ErrorKind::InvalidIssuer => todo!(),
         // jsonwebtoken::errors::ErrorKind::InvalidAudience => todo!(),
         // jsonwebtoken::errors::ErrorKind::InvalidSubject => todo!(),
@@ -52,8 +54,8 @@ pub fn is_valid(token: &str) -> Result<bool, StatusCode> {
         // jsonwebtoken::errors::ErrorKind::Json(_) => todo!(),
         // jsonwebtoken::errors::ErrorKind::Utf8(_) => todo!(),
         // jsonwebtoken::errors::ErrorKind::Crypto(_) => todo!(),
-        _ => todo!(),
+        _ => AppError::new(StatusCode::INTERNAL_SERVER_ERROR, "Something went wrong, please try again"),
     })?;
-    
+
     Ok(true)
 }
