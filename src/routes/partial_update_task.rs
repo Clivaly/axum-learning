@@ -1,5 +1,6 @@
+use axum::extract::State;
 use axum::http::StatusCode;
-use axum::{extract::Path, Extension, Json};
+use axum::{extract::Path, Json};
 use sea_orm::{prelude::DateTimeWithTimeZone, DatabaseConnection, Set};
 use sea_orm::{ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter};
 use serde::Deserialize;
@@ -39,7 +40,7 @@ pub struct RequestTask {
 
 pub async fn partial_update(
     Path(task_id): Path<i32>,
-    Extension(database): Extension<DatabaseConnection>,
+    State(database): State<DatabaseConnection>,
     Json(request_task): Json<RequestTask>,
 ) -> Result<(), StatusCode> {
     let mut db_task = if let Some(task) = Tasks::find_by_id(task_id)

@@ -1,6 +1,4 @@
-// use axum::headers::authorization::Bearer;
-// use axum::headers::Authorization;
-// use axum::TypedHeader;
+use axum::extract::State;
 use axum::{http::StatusCode, Extension, Json};
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
@@ -26,8 +24,9 @@ pub struct ResponseUser {
 }
 
 pub async fn create_user(
+    // Extension(database): Extension<DatabaseConnection>,
+    State(database): State<DatabaseConnection>,
     Json(request_user): Json<RequestUser>,
-    Extension(database): Extension<DatabaseConnection>,
 ) -> Result<Json<ResponseUser>, StatusCode> {
     let jwt = create_jwt()?;
     let new_user = users::ActiveModel {
@@ -48,8 +47,8 @@ pub async fn create_user(
 }
 
 pub async fn login(
+    State(database): State<DatabaseConnection>,
     Json(request_user): Json<RequestUser>,
-    Extension(database): Extension<DatabaseConnection>,
 ) -> Result<Json<ResponseUser>, StatusCode> {
     let db_user = Users::find()
         .filter(users::Column::Username.eq(request_user.username))
@@ -85,7 +84,7 @@ pub async fn login(
 
 pub async fn logout(
     // authorization: TypedHeader<Authorization<Bearer>>,
-    Extension(database): Extension<DatabaseConnection>,
+    State(database): State<DatabaseConnection>,
     Extension(user): Extension<Model>
 ) -> Result<(), StatusCode> {
     // Before being refactored
