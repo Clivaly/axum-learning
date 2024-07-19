@@ -16,7 +16,7 @@ pub struct RequestTask {
         skip_serializing_if = "Option::is_none",    // <- important for serialization
         with = "::serde_with::rust::double_option",
     )]
-    pub priority: Option<Option<String>>,   
+    pub priority: Option<Option<String>>,
     pub title: Option<String>,
     #[serde(
         default,                                    // <- important for deserialization

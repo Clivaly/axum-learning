@@ -10,7 +10,10 @@ mod users;
 mod validate_with_serde;
 
 use axum::{
-    extract::FromRef, middleware, routing::{delete, get, patch, post, put}, Extension, Router
+    extract::FromRef,
+    middleware,
+    routing::{delete, get, patch, post, put},
+    Router,
 };
 use create_task::create_task;
 use custom_json_extractor::custom_json_extractor;
@@ -36,7 +39,7 @@ pub async fn create_routes(database: DatabaseConnection) -> Router {
         .route_layer(middleware::from_fn_with_state(app_state.clone(), guard))
         .route("/validate_data", post(validate_with_serde))
         .route("/custom_json_extractor", post(custom_json_extractor))
-        .route("/tasks", post(create_task))
+        .route("/ ", post(create_task))
         .route("/tasks", get(get_all_tasks))
         .route("/tasks/:task_id", get(get_task_by_id))
         .route("/tasks/:task_id", put(atomic_update))

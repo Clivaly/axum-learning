@@ -46,39 +46,3 @@ pub async fn delete_tasks(
 
     Ok(())
 }
-
-// pub async fn delete_tasks_without_soft(
-//     Path(task_id): Path<i32>,
-//     Extension(database): Extension<DatabaseConnection>,
-// ) -> Result<(), StatusCode> {
-//     // Option 1 for delete task
-//     // let task = if let Some(task) = Tasks::find_by_id(task_id)
-//     //     .one(&database)
-//     //     .await
-//     //     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
-//     // {
-//     //     task.into_active_model()
-//     // } else {
-//     //     return Err(StatusCode::NOT_FOUND);
-//     // };
-
-//     // Tasks::delete(task)
-//     //     .exec(&database)
-//     //     .await
-//     //     .map_err(|_error| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-//     // Option 2 for delete task
-//     // Tasks::delete_by_id(task_id)
-//     //     .exec(&database)
-//     //     .await
-//     //     .map_err(|_error| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-//     // Option 3 for delete task
-//     Tasks::delete_many()
-//     .filter(tasks::Column::Id.eq(task_id))    // Dont forget to pass the filter or this will delete all database
-//     .exec(&database)
-//     .await
-//     .map_err(|_error| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-//     Ok(())
-// }

@@ -6,6 +6,6 @@ use dotenvy_macro::dotenv;
 async fn main() {
     dotenv().ok();
     let database_uri = dotenv!("DATABASE_URL");
-    
+
     run(database_uri).await;
 }

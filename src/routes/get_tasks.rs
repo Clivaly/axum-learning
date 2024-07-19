@@ -23,8 +23,10 @@ pub async fn get_task_by_id(
     State(database): State<DatabaseConnection>,
 ) -> Result<Json<ResponseTask>, StatusCode> {
     let task = Tasks::find_by_id(task_id)
-    .filter(tasks::Column::DeletedAt.is_null())
-    .one(&database).await.unwrap();
+        .filter(tasks::Column::DeletedAt.is_null())
+        .one(&database)
+        .await
+        .unwrap();
 
     if let Some(task) = task {
         Ok(Json(ResponseTask {

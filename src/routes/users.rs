@@ -6,8 +6,8 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::database::users::{self, Model};
 use crate::database::users::Entity as Users;
+use crate::database::users::{self, Model};
 use crate::utils::jwt::create_jwt;
 
 #[derive(Deserialize)]
@@ -85,7 +85,7 @@ pub async fn login(
 pub async fn logout(
     // authorization: TypedHeader<Authorization<Bearer>>,
     State(database): State<DatabaseConnection>,
-    Extension(user): Extension<Model>
+    Extension(user): Extension<Model>,
 ) -> Result<(), StatusCode> {
     // Before being refactored
     // let token = authorization.token();
@@ -100,7 +100,7 @@ pub async fn logout(
     // } else {
     //     return Err(StatusCode::UNAUTHORIZED);
     // };
-    
+
     // Refactored
     let mut user = user.into_active_model();
 

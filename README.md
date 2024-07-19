@@ -22,7 +22,7 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 
 #### Add Axum and tokio and some tokio features to the project and do run:
     $ cargo add axum
-    $ cargo add axum -F headers
+    $ cargo add axum -F headers  # check axum-extra
     $ cargo add tokio -F macros -F rt-multi-thread
     $ cargo add serde -F derive
     $ cargo run
@@ -37,22 +37,25 @@ Tip: I'm using an old version of axum, stay tuned! I will update later.
 #### Add Valiator crate:
     $ cargo add validator -F derive
 
-### Add sea-ORM:
+#### Add sea-ORM:
     $ cargo add sea-orm -F sqlx-postgres -F runtime-tokio-rustls
 
-### Add .env:
+#### Add .env:
     $ cargo add dotenvy dotenvy_macro 
 
-### Add Chrono crate:
+#### Add Chrono crate:
     $ cargo add chrono
 
-### Add Bcrypt crate:
+#### Add Bcrypt crate:
     & cargo add bcrypt
 
-### Add Jsonwebtoken crate:
+#### Add Jsonwebtoken crate:
     & cargo add jsonwebtoken
 
 #### Run local documentation:
     $ cargo doc
     $ cargo doc --open
+
+#### Add extras crate:
+    $ cargo add axum-extra -F typed-header
 
