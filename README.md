@@ -10,16 +10,13 @@ useful links:
    - [Git](https://git-scm.com/downloads)
    - [SeaORM](https://www.sea-ql.org/SeaORM)
 
-`
-Tip: I'm using an old version of axum, stay tuned! I will update later.
-`
-
 #### Create a new rust project, type in the terminal:
 
     $ cargo new axum-learn
     $ cd axum-learn
     $ code .
 
+### Crates:
 #### Add Axum and tokio and some tokio features to the project and do run:
     $ cargo add axum
     $ cargo add axum -F headers  # check axum-extra
